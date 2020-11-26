@@ -50,13 +50,13 @@ function sortByItem($channel)
         $arrayOfItems = (array) $item;
 
         // Push title properties into new array.
-        $arrayOfTitles[] = $arrayOfItems['title'];
+        $arr[] = $arrayOfItems['title'];
 
         // Make comparison, sort if true
-        usort($arrayOfTitles, 'compare');
+        usort($arr, 'compare');
     }
 
-    $json =  json_encode($arrayOfTitles, JSON_PRETTY_PRINT);
+    $json =  json_encode($arr, JSON_PRETTY_PRINT);
     return $json;
 }
 
@@ -96,14 +96,13 @@ function mergeArrays(array $a, array $b)
 
     foreach($c as  $item) {
 
-        $arrayOfTitles =  (array) $item;
+        $arrayOfItems =  (array) $item;
 
-        $titles[] = $arrayOfTitles['title'];
-
-        usort($titles, 'compare');
+        $arr[] = $arrayOfItems['title']; // change to pubDate to sort after date
+        usort($arr, 'compare');
 
     }
 
-    $json =  json_encode($titles, JSON_PRETTY_PRINT);
+    $json =  json_encode($arr, JSON_PRETTY_PRINT);
     return $json;
 }
