@@ -11,24 +11,39 @@ $linkA = 'https://www.buzzfeed.com/world.xml';
 $linkB = 'https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/world/rss.xml';
 
 
-$channel = (array) addLink($linkB);
+$channel1 = (array) addLink($linkB);
 
 $channel2 = (array) addLink($linkA);
 
 
-$res = sortByItem($channel2);
-
-echo $res . "\r\n";
 
 
+// singleChannel($channel1);
+
+multipleChannels($channel1 , $channel2);
+
+
+function multipleChannels($channel1, $channel2)
+{
+    $res = mergeArrays($channel1, $channel2);
+    echo $res . "\r\n";
+
+}
+
+function singleChannel($channel)
+{
+    $res = sortByItem($channel);
+    echo $res . "\r\n";
+}
 
 /**
  * Sort array after channel's items
  * 
- * @param   $channel    object
- * @return  $arrayOfTitles     array
+ * @param   $channel            object
+ * @return  $arrayOfTitles      array
  */
-function sortByItem($channel) {
+function sortByItem($channel) 
+{
     foreach ($channel['item'] as $item) {
 
         // Make an array of an object
@@ -37,8 +52,7 @@ function sortByItem($channel) {
         // Push title properties into new array.
         $arrayOfTitles[] = $arrayOfItems['title'];
 
-
-        // Make comparesiment, sort if true
+        // Make comparison, sort if true
         usort($arrayOfTitles, 'compare');
     }
 
@@ -70,3 +84,26 @@ function addLink($url)
     return $url->channel;
 }
 
+/**
+ * Merge arrays and sort them
+ * 
+ * @param $a & $b       array
+ * @return $titles      array
+ */
+function mergeArrays(array $a, array $b)
+{
+    $c = array_merge($a['item'], $b['item']);
+
+    foreach($c as  $item) {
+
+        $arrayOfTitles =  (array) $item;
+
+        $titles[] = $arrayOfTitles['title'];
+
+        usort($titles, 'compare');
+
+    }
+
+    $json =  json_encode($titles, JSON_PRETTY_PRINT);
+    return $json;
+}
